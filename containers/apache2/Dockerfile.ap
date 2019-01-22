@@ -1,0 +1,49 @@
+FROM php:7.0-apache
+RUN apt-get update && apt-get -y upgrade
+RUN DEBIAN_FRONTEND=noninteractive apt-get -y install \
+  curl zip ssmtp \
+  php7.0-mbstring \
+  php7.0-mysql \
+  php7.0-memcache \
+  php7.0-memcached \
+  php7.0-intl \
+  php7.0-gd \
+  php7.0-imagick \
+  php7.0-mcrypt \
+  php7.0-opcache \
+  php7.0-zip
+
+#     apache2 libapache2-mod-php7.0 \
+#     php-pear \
+#     php7.0-curl \
+#     php7.0-ldap \
+#     php7.0-xdebug \
+#     php7.0-soap \
+
+RUN DEBIAN_FRONTEND=noninteractive apt-get -y install \
+  mc
+
+ENV APACHE_RUN_USER=www-data \
+    APACHE_RUN_GROUP=www-data \
+    APACHE_LOG_DIR=/var/log/apache2 \
+    APACHE_LOCK_DIR=/var/lock/apache2 \
+    APACHE_RUN_DIR=/var/run/apache2 \
+    APACHE_PID_FILE=/var/run/apache2.pid 
+
+COPY ./rootfs /
+
+# RUN a2enmod remoteip && a2enconf remoteip && a2enmod rewrite 
+# RUN a2enmod remoteip && a2enconf remoteip && a2enmod php7.0 && a2enmod rewrite 
+
+# RUN chmod 0600 /etc/msmtprc \
+#   && mkdir -p /var/log/msmtp \
+#   && touch /var/log/msmtp/msmtp.log \
+#   && chmod 775 /var/log/msmtp/msmtp.log \
+#   && chown www-data:www-data /var/log/msmtp/msmtp.log
+
+RUN usermod -u 1000 www-data
+
+# WORKDIR /var/www/html
+# EXPOSE 80
+
+# CMD /usr/sbin/apache2ctl -D FOREGROUND
