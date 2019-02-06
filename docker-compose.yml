@@ -2,10 +2,9 @@ version: "3.0"
 
 services:
   app:
-    build: ./containers/apache2
+    build: ./containers/${WEBSERVER}
     environment:
       - LOG_LEVEL=${APP_LOG_LEVEL}
-      - PRODUCTION=${PRODUCTION}
     volumes:
       - ./src/app:/var/www/html
       - ./logs/php:/var/log/php
@@ -13,15 +12,13 @@ services:
     restart: always
 
   app-cron:
-    build:
-      context: ./containers/apache2
-      dockerfile: Dockerfile.cron
-    container_name: hp-app-cron
+    build: ./containers/${WEBSERVER}
     environment:
       - LOG_LEVEL=${APP_LOG_LEVEL}
     volumes:
       - ./src/app:/var/www/html
       - ./logs/app-cron:/log
+    command: /entrypoint.sh
     restart: always
 
   mysql:
@@ -49,13 +46,13 @@ services:
     command: nginx -g "daemon off;"
     restart: always
 
-  doc:
-    build:
-      context: ./doc
-      dockerfile: Dockerfile
-    volumes:
-      - ./logs/doc:/var/log/nginx
-    restart: always
+  # doc:
+  #   build:
+  #     context: ./doc
+  #     dockerfile: Dockerfile
+  #   volumes:
+  #     - ./logs/doc:/var/log/nginx
+  #   restart: always
 
   mail:
     image: mailhog/mailhog

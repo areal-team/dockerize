@@ -6,7 +6,7 @@
 include .env
 export
 
-MYSQL_DUMP := bitrix@192.168.0.219:/home/bitrix/portal.sql
+MYSQL_DUMP := bitrix@192.168.0.219:/home/bitrix/db.sql
 RSYNC_ROOT := bitrix@192.168.0.219:/home/bitrix/www/
 
 MYSQL_CONTAINER_NAME := $(shell docker ps --filter name=mysql --format {{.Names}})
@@ -30,12 +30,12 @@ help: ## Show this help
 
 # --- [ Application ] -------------------------------------------------------------------------------------------------
 
-init: rsync app-composer-install ## init project
+init: rsync restore-first app-composer-install ## init project
 
 rsync: ## rsync bitrix folder
 	@echo "Starting download database dump"
-	rsync -avz --exclude 'bitrix/backup/'  --exclude 'bitrix/*cache/' $(RSYNC_ROOT)/bitrix ./src/app/
-	rsync -av $(RSYNC_ROOT)/upload ./src/app/
+	rsync -avz --exclude 'bitrix/backup/' --exclude 'bitrix/*cache/' $(RSYNC_ROOT)/bitrix ./src/app/
+	rsync -av --exclude 'upload/disk/' $(RSYNC_ROOT)/upload ./src/app/
 
 # --- [ MySQL ] -------------------------------------------------------------------------------------------------
 
