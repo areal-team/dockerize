@@ -1,8 +1,6 @@
 # Развертывание проекта для разработчика
 
 ## Общая информация
-- Репозиторий: https://git.arealidea.ru/arealidea/dockerize
-- [Issues](https://git.arealidea.ru/arealidea/dockerize/issues)
 - Для удобства разработки в проект добавлена поддержка docker.
 - При этом на продуктовом сервере докер может не использоваться.
 - Почту можно проверять по [адресу](http://localhost:8025)
@@ -11,10 +9,6 @@
 
 
 ## Начало работы с проектом
-- Склонируйте из репозитория:
-    ```bash
-    git clone ssh://git@git.arealidea.ru:23450/arealidea/dockerize.git
-    ```
 - Иницализация 
     ```bash
     make init
